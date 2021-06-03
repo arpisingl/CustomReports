@@ -1,1 +1,1 @@
-web: ginicorn app:views
+web: gunicorn views:app
