@@ -9,9 +9,8 @@ from datetime import datetime as dt
 from datetime import date
 
 app = Flask(__name__)
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
 app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
-app.secret_key = "mysecret_key92829282828282828343434@1234"
+app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
 # View Pages
