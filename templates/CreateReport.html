@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Create New</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='homePages/homeStyle.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/style.css') }}">
+
+	<!-- Linear icons -->
+	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
+	<!-- Jquery -->
+	<script
+	  src="https://code.jquery.com/jquery-3.6.0.min.js"
+	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	  crossorigin="anonymous"></script>
+
+	<!-- Js file -->
+	<script type="text/javascript" src="{{ url_for('static',filename='homePages/homeScript.js') }}"></script>
+
+</head>
+<body>
+	<DIV class="fluid-container bck_color">
+		<div class="header-section">
+			<div class="container">
+				<div class="menu-bar row">
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="{{url_for('load_user_home', id=data.username)}}">
+							Home
+							<span class="lnr lnr-home"></span>
+						</a>
+					</div>
+					<div class="col-sm-8">
+						
+					</div>
+					<div class="col-sm-1">
+						<!-- Profile
+						<span class="lnr lnr-user"></span> -->
+					</div>
+					<div class="col-sm-1 menu-options">
+						Profile
+						<span class="lnr lnr-user"></span>
+					</div>
+					<!-- <div class="col-sm-1 menu-options">
+						Settings
+						<span class="lnr lnr-cog"></span>
+					</div> -->
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="/logout/{{data.username}}">
+							Logout
+							<span class="lnr lnr-power-switch"></span>
+						</a>
+					</div>
+				</div>
+				<div class="welcome_user row">
+					<div class="col-sm-2">
+						
+					</div>
+					<div class="welcome_text col-sm-8">
+						Welcome 
+						<span id="username">{{ data.username }}</span>
+					</div>
+					<div class="col-sm-2">
+						
+					</div>
+				</div>
+				<div class="text_heading row">
+					<div class="col-sm-8">
+						Design your report here
+					</div>
+					<div class="col-sm-4">
+						<div class="row">
+							<div class="">
+								<input type="text" class="form-control rounded-left" placeholder="Serach Report" name="report_name">
+							</div>
+							&nbsp;		
+							<div class="">
+								<button class="btn btn-success">
+									Search 
+									<span class="lnr lnr-magnifier"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="body-section">
+			<div class="container">
+				<form>
+
+					<div class="row">
+						<div class="col-sm-8">
+							<div class="row">
+								<div class="col-sm-10">
+									<!-- input-area -->
+									<h1 class="heading-section">Add new title to this report</h1>
+									<div class="input-area">
+										<input type="text" name="report_title" class="form-control rounded-left" placeholder="Add your title" required>
+									</div>
+								</div>
+							</div>
+							
+							<br>
+
+							<div class="row">
+								<div class="col-sm-10">
+									<h3>Select report type</h3>
+									<div class="input-area row">
+										<div class="col-sm-6">
+											<select class="form-control" id="report_type">
+												<option value="">None</option>
+												<option value="Tabular">Tabular</option>
+												<option value="Descriptive">Descriptive</option>
+											</select>
+										</div>
+									</div>
+								</div>	
+							</div>
+
+							<br>
+
+							<div class="row">
+								<div class="col-sm-10">
+									<h1 class="heading-section">Add field to this report</h1>	
+									<div class="input-area">
+										<input type="text" class="form-control" name="report_fields_name" placeholder="Enter your field name">	
+									</div>
+									<br>
+									<div class="input-area row">
+										<div class="col-sm-6">
+											<select class="form-control" id="report_fields_type">
+												<option value="">Field type</option>
+												<option value="text">Text</option>
+												<option value="number">Number</option>
+												<option value="date">Date</option>
+												<option value="check_box">Check Box</option>
+												<option value="radio_button">Radio Button</option>
+												<option value="text_area">Text Area</option>
+												<option value="image">Image</option>
+											</select>
+										</div>
+
+										<div class="col-sm-4">
+											<button type="button" class="btn btn-success" onclick="addField()">
+												Add &nbsp; <span class="lnr lnr-plus-circle"></span>
+											</button>	
+										</div>
+									</div>
+								</div>	
+							</div>
+							<br>
+							<div class="row">
+								<button type="button" class="btn btn-primary" onclick="saveReport()">
+									Save Report
+									<span class="lnr lnr-checkmark-circle"></span>
+								</button>
+							</div>
+						</div>
+						<div class="field-part col-sm-4" id="field_part">
+							<!-- <div class="field-row row">
+								<div class="field-name">
+									Added Field &nbsp;
+									Field Type &nbsp;
+									<span class="lnr lnr-cross-circle"></span>
+								</div>
+							</div> -->
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</DIV>
+</body>
+</html>
+

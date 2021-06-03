@@ -1,0 +1,26 @@
+User : {
+	"_id" : "String",
+	"username" : "String",
+	"email" : "String-Email",
+	"password" : "String-*****"
+},
+
+Reports: {
+	"report_id" : "String",
+	"report_title" : "String",
+	"report_type" : "String",
+	"report_created_by" : "String",
+	"report_created_on" : Date,
+	"report_fields_name" : ["String"],
+	"report_fields_type" : ["String"],
+	"reprot_last_edit" : date
+}
+
+ReportData: {
+	"report_data_id" : "string",
+	"report_id" : "String",
+	"report_created_by" : "String",
+	"report_fields_name" : "report_fields_type",
+}
+	
+	

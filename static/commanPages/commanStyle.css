@@ -1,0 +1,40 @@
+.report_block{
+	padding: 20px;
+    background-color: #c5cae9;
+    border-radius: 0.5em;
+    margin-bottom: 5px;
+}
+
+.report-title{
+	font-size: 25px;
+    font-weight: 800;
+    color: #b71c1c;
+}
+.report-sub-title{
+	font-size: 16px;
+    font-weight: bold;
+    color: #7d1ee5;
+}
+
+.report-type{
+	color: darkolivegreen;
+	font-weight: 600;
+}
+
+.report-size{
+	background-color: #57a57d;
+    border-radius: 50px;
+    padding: 5px;
+    color: white;
+    margin: 10px;
+}
+.report-fields{
+	color: #ffffff;
+    background-color: brown;
+    border-radius: 0.3em;
+    padding: 3px;
+    padding-right: 8px;
+    padding-left: 8px;
+    margin: 1px;
+    width: fit-content;
+}

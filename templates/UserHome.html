@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>User Dashboard</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='homePages/homeStyle.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/style.css') }}">
+
+	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
+</head>
+<body>
+	<DIV class="fluid-container bck_color">
+		<div class="header-section">
+			<div class="container">
+				<div class="menu-bar row">
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="{{url_for('load_user_home', id=data.username)}}">
+							Home
+							<span class="lnr lnr-home"></span>
+						</a>
+					</div>
+					<div class="col-sm-8">
+						
+					</div>
+					<div class="col-sm-1">
+						<!-- Profile
+						<span class="lnr lnr-user"></span> -->
+					</div>
+					<div class="col-sm-1 menu-options">
+						Profile
+						<span class="lnr lnr-user"></span>
+					</div>
+					<!-- <div class="col-sm-1 menu-options">
+						Settings
+						<span class="lnr lnr-cog"></span>
+					</div> -->
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="/logout/{{data.username}}">
+							Logout
+							<span class="lnr lnr-power-switch"></span>
+						</a>
+					</div>
+				</div>
+				<div class="welcome_user row">
+					<div class="col-sm-2">
+						
+					</div>
+					<div class="welcome_text col-sm-8">
+						Welcome {{ data.username }}
+					</div>
+					<div class="col-sm-2">
+						
+					</div>
+				</div>
+				<div class="text_heading row">
+					<div class="col-sm-8">
+						Create your own custom reports
+					</div>
+					<div class="col-sm-4">
+						<div class="row">
+							<div class="">
+								<input type="text" class="form-control rounded-left" placeholder="Serach Report" name="report_name">
+							</div>
+							&nbsp;		
+							<div class="">
+								<button class="btn btn-success">
+									Search 
+									<span class="lnr lnr-magnifier"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="body-section">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="body_cover row">
+							<div class="blocks col-sm-6">
+								<a class="a_links" href="{{url_for('load_create_report', id=data.username)}}">
+									Create new
+									<span class="lnr lnr-file-add"></span>
+								</a>
+							</div>
+							<div class="blocks col-sm-6">
+								<a class="a_links" href="{{url_for('load_view_reports', id=data.username)}}">
+									View All
+									<span class="lnr lnr-menu"></span>
+								</a>
+							</div>
+							
+						</div>
+						<div class="body_cover row">
+							<div class="blocks col-sm-6">
+								Shared
+								<span class="lnr lnr-upload"></span>
+							</div>
+							<div class="blocks col-sm-6">
+								Modify
+								<span class="lnr lnr-pencil"></span>
+							</div>
+							
+						</div>
+						<div class="body_cover row">
+							<div class="blocks col-sm-6">
+								Downloaded
+								<span class="lnr lnr-download"></span>
+							</div>
+							<div class="blocks col-sm-6">
+								Settings
+								<span class="lnr lnr-cog"></span>
+							</div>
+						</div>						
+					</div>
+					<div class="col-sm-1">
+					</div>
+
+					<div class="col-sm-5 right_pannel">
+						<div class="heading-section_1">
+							Your Recent Reports
+						</div>
+						<div class="list_reports">	
+
+							{% if report_data %}
+								{% for key in report_data %}
+									<div class="list_style">{{key['report_title']}} | {{key['report_type']}} | <span class="lnr lnr-book"></span>
+										<div>
+											Last Edited : {{key['reprot_last_edit'] }}
+										</div>
+									</div>
+								{% endfor %}
+							{% endif %}
+							{% if not report_data %}
+								<div class="list_not_available"> No Report Available ! </div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</DIV>
+</body>
+</html>

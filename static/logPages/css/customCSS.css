@@ -1,0 +1,15 @@
+.valid_box_userid, .valid_box_password, .valid_box_email{
+	color: red;
+    display: none;
+    padding: 5px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    border-radius: 0.3em;
+    background-color: bisque;
+}
+
+.success_section{
+	color: #4cd843;
+	font-weight: 700;
+	display: none;
+}
