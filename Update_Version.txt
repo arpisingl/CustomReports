@@ -1,0 +1,27 @@
+=================================================
+Version_3 Created on May 31 2021,
+
+1. Added the validations for Userid & Email & Password
+2. Added the Email Pattern validator to the code.
+3. Update the Error Block for every fields
+4. Update the /add-user to adapt the changes.
+5. Update the User Payload (new fields added)
+6. Update the SignUp page to show the Message generated after successfully creation of an account.
+
+All of these validation have been added on SignUp Page.
+=================================================
+Version_4 Created on June 1 2021,
+
+1. Added the validations for checking an Existing Userid & Email id at the time of User Creation
+2. Update the Email Validation (Increase the no.of "DOT" present in Email.)
+3. Add two new urls in Views.py for checking the Existing Email & Userid.
+4. Update the models.py to fetching the same result.
+
+All of these validation have been added on SignUp Page.
+=================================================
+Version_5 Created on June 2 2021,
+
+1. Added the New Page to the Project : View All Reports.
+2. Show all the reports with every details.
+3. Added the new URL for the same in Views.Py
+4. Added the New Fetching Report Details from models.py
