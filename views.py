@@ -9,7 +9,9 @@ from datetime import datetime as dt
 from datetime import date
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -130,6 +132,44 @@ def load_view_reports(id):
 		}
 		return render_template("index.html", response = response)		
 
+
+# view user report:
+@app.route("/user/report/<id>/<report_id>")
+def load_user_report(id,report_id):
+	userData = user.find_by_userid(mongo,id)
+	
+
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+				report_cols = []
+				colTypes = reportData['report_fields_type']
+
+				for (a, b) in zip(reportData['report_fields_name'], colTypes):
+					report_col = {
+						'report_fields_name' : a.replace(" ","_"),
+						'report_fields_type' : b
+					}
+					report_cols.append(report_col)
+				# return dumps(report_cols)
+				return render_template("ViewReport.html", data = userData, report_content = reportData, report_cols = report_cols)
+			else:
+				return render_template("ViewReport.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
+	
 # Model Pages...
 
 #check_Exsiting_User : 
@@ -316,4 +356,5 @@ def save_report(id):
 
 
 if __name__ == "__main__":
-	app.run()
+	# app.run()
+	app.run(debug=True, host="0.0.0.0", port=3000)

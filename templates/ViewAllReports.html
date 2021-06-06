@@ -106,20 +106,23 @@
 								<div class="col-sm-8">
 									<div class="report-title">
 										{{report['report_title']}}
-										<span class="report-size">
+										<!-- <span class="report-size">
 											5
-										</span>
+										</span> -->
 									</div>
 								</div>
 								
 								<div class="col-sm-4">
 									<button class="btn btn-primary">
 										Download 
+										<span class="lnr lnr-download"></span>
 									</button>
-									<button class="btn btn-success">
-										View 
-									</button>
-									
+									<a href="{{url_for('load_user_report',id = report['report_created_by'], report_id = report['report_id'])}}">
+										<div class="btn btn-success">
+											View 
+											<!-- <span class="lnr lnr-location"></span> -->
+										</div>
+									</a>
 								</div>
 							</div>
 							<div class="row">
@@ -130,8 +133,6 @@
 									</div>
 									<div class="report-sub-title">Last used : {{report['reprot_last_edit']}}</div>
 								</div>
-								
-								
 							</div>
 							<br>
 							<div class="row">

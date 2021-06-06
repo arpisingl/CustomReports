@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	{% if report_content %}
+	<title>Report : {{report_content['report_title']}}</title>
+	{% endif %}
+
+	{% if not report_content %}
+	<title>Report : Not Found</title>
+	{% endif %}
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='homePages/homeStyle.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/style.css') }}">
+
+	<link rel="stylesheet" href="{{ url_for('static',filename='commanPages/commanStyle.css') }}">
+
+	<!-- Linear icons -->
+	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+
+	<!-- Jquery -->
+	<script
+	  src="https://code.jquery.com/jquery-3.6.0.min.js"
+	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	  crossorigin="anonymous"></script>
+
+	<!-- Js file -->
+	<script type="text/javascript" src="{{ url_for('static',filename='homePages/homeScript.js') }}"></script>
+
+</head>
+<body>
+	<DIV class="fluid-container bck_color">
+		<div class="header-section">
+			<div class="container">
+				<div class="menu-bar row">
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="{{url_for('load_user_home', id=data.username)}}">
+							Home
+							<span class="lnr lnr-home"></span>
+						</a>
+					</div>
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="{{url_for('load_view_reports', id=data.username)}}">
+							Reports
+						</a>
+					</div>
+					<div class="col-sm-7">
+						
+					</div>
+					<div class="col-sm-1">
+						<!-- Profile
+						<span class="lnr lnr-user"></span> -->
+					</div>
+					<div class="col-sm-1 menu-options">
+						Profile
+						<span class="lnr lnr-user"></span>
+					</div>
+					<!-- <div class="col-sm-1 menu-options">
+						Settings
+						<span class="lnr lnr-cog"></span>
+					</div> -->
+					<div class="col-sm-1 menu-options">
+						<a class="a_links" href="/logout/{{data.username}}">
+							Logout
+							<span class="lnr lnr-power-switch"></span>
+						</a>
+					</div>
+				</div>
+				<div class="welcome_user row">
+					<div class="col-sm-2">
+						
+					</div>
+					<div class="welcome_text col-sm-8">
+						Welcome 
+						<span id="username">{{ data.username }}</span>
+					</div>
+					<div class="col-sm-2">
+						
+					</div>
+				</div>
+				<div class="text_heading row">
+					<div class="col-sm-8">
+						{% if report_content %}
+							Report : {{ report_content.report_title }}
+						{% endif %}
+						{% if not report_content %}
+							Unknown report
+						{% endif %}
+					</div>
+					<div class="col-sm-4">
+						<div class="row">
+							<div class="">
+								<input type="text" class="form-control rounded-left" placeholder="Serach Report" name="report_name">
+							</div>
+							&nbsp;		
+							<div class="">
+								<button class="btn btn-success">
+									Search 
+									<span class="lnr lnr-magnifier"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="body-section">
+			<div class="container">
+				{% if report_cols %}
+					<!-- {{report_content}} -->
+					<div class="row">
+						<div class="col-sm-7">
+							<div class="report_block col-sm-12">
+								<div class="row">
+									<div class="col-sm-8">
+										<div class="report-title">
+											{{report_content['report_title']}}
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<a href="{{url_for('load_user_report',id = report_content['report_created_by'], report_id = report_content['report_id'])}}">
+											<div class="btn btn-success">
+												Show Report Data
+												<span class="lnr lnr-eye"></span>
+											</div>
+										</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-7">
+										<div class="report-type">
+											Report Type : {{report_content['report_type']}}
+										</div>
+										<div class="report-type">
+											Report Created by : 
+											<a href="#">
+												{{report_content['report_created_by']}}
+											</a>
+										</div>
+										<div class="report-sub-title">
+											Report Created 
+											<span class="lnr lnr-calendar-full"></span> : {{report_content['report_created_on']}}
+										</div>
+										<div class="report-sub-title">
+											Last used 
+											<span class="lnr lnr-history"></span> : {{report_content['reprot_last_edit']}}
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									{% for field in report_content['report_fields_name'] %}
+									<div class="report-fields">
+										{{field}}
+									</div>
+									{% endfor %}
+								</div>
+								<div class="row">
+									<button class="btn btn-info btns">
+										Share Report
+										<span class="lnr lnr-location"></span>
+									</button>
+									<button class="btn btn-primary btns">
+										Download Report 
+										<span class="lnr lnr-download"></span>
+									</button>
+									<button class="btn btn-warning btns">
+										Modify Report
+										<span class="lnr lnr-trash"></span>
+									</button>
+									<button class="btn btn-danger btns">
+										Delete Report
+										<span class="lnr lnr-trash"></span>
+									</button>
+								</div>
+							</div>		
+						</div>
+						<div class="col-sm-5">
+
+							<!-- {{report_cols}} -->
+							<form class="form-part">
+								{% for field in report_cols  %}
+									<div class="input-header">
+										{{ field.report_fields_name }} :
+										<!-- : {{ field.report_fields_type}} -->
+									</div>
+									<div class="input-area">
+										<input type="{{field.report_fields_type}}" 
+										name="{{field.report_fields_name}}" 
+										placeholder="{{field.report_fields_name}}"
+										class="form-control">
+									</div>
+								{% endfor %}
+
+								<div class="input-submit">
+									<button class="btn btn-success">
+										Add Data
+										<span class="lnr lnr-file-add"></span>
+									</button>
+									<button class="btn btn-danger">
+										Clear All Data
+										<span class="lnr lnr-warning"></span>
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				{% endif %}
+
+				{% if not report_content %}
+					<h1>
+						Oops Report Not Found !
+					</h1>
+				{% endif %}
+
+				{% if not report_cols %}
+					<h1>
+						You don't have any fields in this report !
+					</h1>
+				{% endif %}
+				
+
+			</div>
+		</div>
+	</DIV>
+</body>
+</html>
+
