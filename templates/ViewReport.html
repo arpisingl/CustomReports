@@ -35,6 +35,8 @@
 	<!-- Js file -->
 	<script type="text/javascript" src="{{ url_for('static',filename='homePages/homeScript.js') }}"></script>
 
+	<script type="text/javascript" src="{{ url_for('static',filename='commanPages/commanScript.js') }}"></script>
+
 </head>
 <body>
 	<DIV class="fluid-container bck_color">
@@ -102,7 +104,7 @@
 							</div>
 							&nbsp;		
 							<div class="">
-								<button class="btn btn-success">
+								<button class="btn btn-success" onclick="search_report_on_report_page()">
 									Search 
 									<span class="lnr lnr-magnifier"></span>
 								</button>
@@ -177,7 +179,7 @@
 										Modify Report
 										<span class="lnr lnr-trash"></span>
 									</button>
-									<button class="btn btn-danger btns">
+									<button class="btn btn-danger btns" onclick="delete_report()">
 										Delete Report
 										<span class="lnr lnr-trash"></span>
 									</button>

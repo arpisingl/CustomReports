@@ -135,3 +135,28 @@ function covertFieldTypeToMode(type){
 function remove_field(){
 	// 
 }
+
+function search_report() {
+	// body...
+	var report_name = $("input[name = 'report_name']").val();
+
+	var post_data = {
+		'report_title' : report_name,
+	}
+
+	$.ajax({
+		url : '/user/reports/'+userid+'/check-report',
+		data : post_data,
+		type : 'POST',
+		dataType : 'json',
+		success:  function(res){
+			if(res.status === "False"){
+				alert(res.message);
+			}
+			else{
+				console.log(res);
+				window.location.href = "/user/report/"+res.userid+"/"+res.report_id;
+			}
+		} 
+	});
+}

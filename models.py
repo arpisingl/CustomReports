@@ -34,8 +34,6 @@ class User():
 		return U
 
 class Reports():
-	"""docstring for Reports"""
-	
 	def save_report_to_DB(mongo,report_data):
 		R = mongo.db.Report.insert_one(report_data)
 		return R
@@ -50,4 +48,12 @@ class Reports():
 
 	def find_by_report_id(mongo,id,report_id):
 		report_data = mongo.db.Report.find_one({"report_id":report_id, "report_created_by" : id},{"_id":0})
+		return report_data
+
+	def find_report_by_title(mongo,report_title,id):
+		report_data = mongo.db.Report.find_one({"report_title":report_title, "report_created_by" : id},{"report_id" :1 , "report_created_by":1})
+		return report_data
+
+	def delete_report(mongo,report_id,id):
+		report_data = mongo.db.Report.delete_one({"report_id":report_id, "report_created_by" : id})
 		return report_data
