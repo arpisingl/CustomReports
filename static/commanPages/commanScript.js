@@ -9,7 +9,7 @@ $(document).ready(function(){
 });
 
 function search_report_on_report_page() {
-	// body...
+	
 	var report_name = $("input[name = 'report_name']").val();
 
 	var post_data = {
