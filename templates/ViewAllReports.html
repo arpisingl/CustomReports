@@ -154,11 +154,13 @@
 
 							{% if report_data %}
 								{% for key in report_data %}
+								<a href="{{url_for('load_user_report',id=data.username, report_id= key['report_id'] )}}">
 									<div class="list_style">{{key['report_title']}} | {{key['report_type']}} | <span class="lnr lnr-book"></span>
 										<div>
 											Last Edited : {{key['reprot_last_edit'] }}
 										</div>
 									</div>
+								</a>
 								{% endfor %}
 							{% endif %}
 							{% if not report_data %}

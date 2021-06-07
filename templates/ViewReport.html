@@ -58,17 +58,12 @@
 						
 					</div>
 					<div class="col-sm-1">
-						<!-- Profile
-						<span class="lnr lnr-user"></span> -->
+
 					</div>
 					<div class="col-sm-1 menu-options">
 						Profile
 						<span class="lnr lnr-user"></span>
 					</div>
-					<!-- <div class="col-sm-1 menu-options">
-						Settings
-						<span class="lnr lnr-cog"></span>
-					</div> -->
 					<div class="col-sm-1 menu-options">
 						<a class="a_links" href="/logout/{{data.username}}">
 							Logout
@@ -177,7 +172,7 @@
 									</button>
 									<button class="btn btn-warning btns">
 										Modify Report
-										<span class="lnr lnr-trash"></span>
+										<span class="lnr lnr-pencil"></span>
 									</button>
 									<button class="btn btn-danger btns" onclick="delete_report()">
 										Delete Report
@@ -224,13 +219,53 @@
 					</h1>
 				{% endif %}
 
-				{% if not report_cols %}
-					<h1>
-						You don't have any fields in this report !
-					</h1>
-				{% endif %}
-				
 
+				{% if report_content %}
+					{% if not report_cols %}
+						<h1>
+							You don't have added any fields in this report !
+						</h1>
+						<div class="row">
+							<div class="col-sm-7">
+								<div class="report-type">
+									Report Type : {{report_content['report_type']}}
+								</div>
+								<div class="report-type">
+									Report Created by : 
+									<a href="#">
+										{{report_content['report_created_by']}}
+									</a>
+								</div>
+								<div class="report-sub-title">
+									Report Created 
+									<span class="lnr lnr-calendar-full"></span> : {{report_content['report_created_on']}}
+								</div>
+								<div class="report-sub-title">
+									Last used 
+									<span class="lnr lnr-history"></span> : {{report_content['reprot_last_edit']}}
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							{% for field in report_content['report_fields_name'] %}
+							<div class="report-fields">
+								{{field}}
+							</div>
+							{% endfor %}
+						</div>
+						<div class="row">
+							<button class="btn btn-primary btns">
+								Add Fields
+								<span class="lnr lnr-plus-circle"></span>
+							</button>
+							<button class="btn btn-danger btns" onclick="delete_report()">
+								Delete Report
+								<span class="lnr lnr-trash"></span>
+							</button>
+						</div>
+					{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</DIV>
