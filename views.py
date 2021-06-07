@@ -10,8 +10,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -171,6 +171,80 @@ def load_user_report(id,report_id):
 		return render_template("index.html", response = response)
 	
 # Model Pages...
+
+# search report by title:
+@app.route("/user/reports/<id>/check-report", methods=['POST'])
+def searchReport(id):
+	report_title = request.form['report_title']
+
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			report_content = report_model.find_report_by_title(mongo,report_title,id)
+
+			if(report_content):
+				res_data = {
+					'report_id' : report_content['report_id'],
+					'userid' : report_content['report_created_by']
+				}
+				return res_data
+			else:
+				res = {
+					'status': 'False',
+					'message' : "No Report Found" 
+				}
+				return res
+			
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)		
+
+# delete Report permanently : 
+@app.route("/user/reports/<id>/delete-report", methods=['POST'])
+def delete_report(id):
+	report_id = request.form['report_id']
+
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			report_content = report_model.delete_report(mongo,report_id,id)
+			if(report_content):
+				current_report_count = userData['no_of_report_created']
+				current_report_count = current_report_count - 1
+				updated_report_count = user.updateReportCount(mongo,userData['username'],current_report_count)
+				res_data = {
+					'status':  'OK',
+					'message' : "Report Deleted Successfully"
+				}
+				return res_data
+			else:
+				res = {
+					'status': 'False',
+					'message' : "No Report Found" 
+				}
+				return res
+			
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)	
 
 #check_Exsiting_User : 
 @app.route("/check-existing-userid", methods=['POST'])
@@ -356,5 +430,5 @@ def save_report(id):
 
 
 if __name__ == "__main__":
-	app.run()
-	# app.run(debug=True, host="0.0.0.0", port=3000)
+	# app.run()
+	app.run(debug=True, host="0.0.0.0", port=3000)

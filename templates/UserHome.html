@@ -16,6 +16,15 @@
 
 	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
 
+	<!-- Jquery -->
+	<script
+	  src="https://code.jquery.com/jquery-3.6.0.min.js"
+	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	  crossorigin="anonymous"></script>
+	  
+	<!-- JS File -->
+	<script type="text/javascript" src="{{ url_for('static',filename='homePages/homeScript.js') }}"></script>
+
 </head>
 <body>
 	<DIV class="fluid-container bck_color">
@@ -72,7 +81,7 @@
 							</div>
 							&nbsp;		
 							<div class="">
-								<button class="btn btn-success">
+								<button class="btn btn-success" onclick="search_report()">
 									Search 
 									<span class="lnr lnr-magnifier"></span>
 								</button>
