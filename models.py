@@ -39,7 +39,7 @@ class Reports():
 		return R
 		
 	def find_recent_reports(mongo,user_id):
-		reports = mongo.db.Report.find({"report_created_by": user_id}, {"_id" :0,"report_title" :1,"report_type": 1,"report_created_on" : 1,"reprot_last_edit" : 1}).sort("report_id", -1).limit(3)
+		reports = mongo.db.Report.find({"report_created_by": user_id}, {"report_id" :1,"report_title" :1,"report_type": 1,"report_created_on" : 1,"reprot_last_edit" : 1}).sort("report_id", -1).limit(3)
 		return reports
 
 	def fetch_all_reports(mongo,user_id):

@@ -41,8 +41,6 @@ function delete_report(){
 		var post_data = {
 			'report_id' : report_id,
 		}
-
-
 		$.ajax({
 			url : "/user/reports/"+userid+"/delete-report",
 			data : post_data,
@@ -54,7 +52,7 @@ function delete_report(){
 				}
 				else if(res.status === "OK"){
 					alert(res.message);
-					window.location.href = "/user/view-reports/"+res.userid;
+					window.location.href = "/user/view-reports/"+userid;
 				}
 			} 
 		});
