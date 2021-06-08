@@ -52,7 +52,9 @@ function delete_report(){
 				}
 				else if(res.status === "OK"){
 					alert(res.message);
-					window.location.href = "/user/view-reports/"+userid;
+					if(userid){
+						window.location.href = "/user/view-reports/"+userid;	
+					}
 				}
 			} 
 		});

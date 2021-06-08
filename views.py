@@ -5,6 +5,7 @@ from pprint import pprint
 from bson.json_util import dumps
 from models import User as user
 from models import Reports as report_model
+from models import ReportData as rd_model
 from datetime import datetime as dt
 from datetime import date
 
@@ -428,6 +429,66 @@ def save_report(id):
 		}
 		return render_template("index.html", response = response)		
 
+
+# Save the Report Data
+@app.route("/user/save-report-data/<id>/<report_id>", methods=['POST'])
+def save_report_data(id,report_id):
+	now = dt.now()
+	
+	RD_response = {
+		"status" : "",
+		"message" : ""
+	}
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+
+				# To Create the Data Object:
+				report_form_data = {
+					"report_data_id" : "RD"+id+"_"+now.strftime("%m%d%Y%H%M%S"),
+					"report_id" : report_id,
+					"report_created_by" : id
+				}
+				for f in reportData['report_fields_name']:
+					report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]
+
+				# Save the Report Data to DB:
+				added_RD = rd_model.save_report_data_to_DB(mongo,report_form_data)
+				if(added_RD):
+					return redirect(url_for('load_user_report',id=id,report_id=report_id))
+				else:
+					RD_response = {
+						"status" : "False",
+						"message" : "Some thing went wrong"
+					}
+					report_cols = []
+					colTypes = reportData['report_fields_type']
+
+					for (a, b) in zip(reportData['report_fields_name'], colTypes):
+						report_col = {
+							'report_fields_name' : a.replace(" ","_"),
+							'report_fields_type' : b
+						}
+						report_cols.append(report_col)
+
+					return render_template("ViewReport.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
+
+			else:
+				return render_template("ViewReport.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
 	app.run()
