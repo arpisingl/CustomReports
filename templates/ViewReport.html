@@ -182,9 +182,22 @@
 							</div>		
 						</div>
 						<div class="col-sm-5">
+							{% if rd_response %}
+								{% if rd_response.status == "OK" %}
+									{{rd_response.message}}
+								{% endif %}
+								{% if rd_response.status == "False" %}
+									{{rd_response.message}}
+								{% endif %}
+							{% endif %}
+
+							{% if not rd_response %}
+								
+							{% endif %}
 
 							<!-- {{report_cols}} -->
-							<form class="form-part">
+							<form class="form-part" 
+							action="{{url_for('save_report_data',id=data.username,report_id=report_content['report_id'])}}" method="POST">
 								{% for field in report_cols  %}
 									<div class="input-header">
 										{{ field.report_fields_name }} :
@@ -199,11 +212,11 @@
 								{% endfor %}
 
 								<div class="input-submit">
-									<button class="btn btn-success">
+									<button class="btn btn-success" type="submit">
 										Add Data
 										<span class="lnr lnr-file-add"></span>
 									</button>
-									<button class="btn btn-danger">
+									<button class="btn btn-danger" type="button">
 										Clear All Data
 										<span class="lnr lnr-warning"></span>
 									</button>

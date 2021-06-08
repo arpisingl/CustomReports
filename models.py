@@ -57,3 +57,12 @@ class Reports():
 	def delete_report(mongo,report_id,id):
 		report_data = mongo.db.Report.delete_one({"report_id":report_id, "report_created_by" : id})
 		return report_data
+
+
+class ReportData():
+	
+	def save_report_data_to_DB(mongo,data):
+		Rd = mongo.db.ReportData.insert_one(data)
+		return Rd
+	
+		

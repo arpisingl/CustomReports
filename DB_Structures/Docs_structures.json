@@ -1,8 +1,10 @@
 User : {
 	"_id" : "String",
 	"username" : "String",
-	"email" : "String-Email",
-	"password" : "String-*****"
+	"email" : "String",
+	"password" : "String****",
+	"no_of_report_created" : int,
+	"account_created_on" : Date
 },
 
 Reports: {
@@ -20,7 +22,10 @@ ReportData: {
 	"report_data_id" : "string",
 	"report_id" : "String",
 	"report_created_by" : "String",
-	"report_fields_name" : "report_fields_type",
+	"report_fields_name" : "report_fields_value",
+	"report_fields_name" : "report_fields_value",
+	"report_fields_name" : "report_fields_value",
+	...
 }
 	
 	
