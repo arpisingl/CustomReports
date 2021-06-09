@@ -58,6 +58,10 @@ class Reports():
 		report_data = mongo.db.Report.delete_one({"report_id":report_id, "report_created_by" : id})
 		return report_data
 
+	def update_report_last_edit(mongo,id,report_id,report_last_edit):
+		U = mongo.db.Report.update_one({"report_id":report_id, "report_created_by" : id},{ '$set' : {'reprot_last_edit': report_last_edit} })
+		return U
+
 
 class ReportData():
 	
@@ -65,4 +69,11 @@ class ReportData():
 		Rd = mongo.db.ReportData.insert_one(data)
 		return Rd
 	
+	def delete_report_data(mongo,report_id,id):
+		report_data_content = mongo.db.ReportData.delete_many({"report_id":report_id, "report_created_by" : id})
+		return report_data_content
 		
+	def get_report_size(mongo,report_id,id):
+		report_data_content = mongo.db.ReportData.aggregate([{ "$match" : {"report_id":report_id, "report_created_by" : id} }, 
+															 { "$group" : {"_id":"$report_id", "count" : {"$sum" : 1} } }])
+		return report_data_content

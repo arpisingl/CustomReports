@@ -150,7 +150,7 @@ def load_user_report(id,report_id):
 
 				for (a, b) in zip(reportData['report_fields_name'], colTypes):
 					report_col = {
-						'report_fields_name' : a.replace(" ","_"),
+						'report_fields_name' : a.replace(" ","_").replace(".",""),
 						'report_fields_type' : b
 					}
 					report_cols.append(report_col)
@@ -172,6 +172,36 @@ def load_user_report(id,report_id):
 		return render_template("index.html", response = response)
 	
 # Model Pages...
+
+# calculate the report_size
+@app.route("/user/reports/<id>/report-size", methods=['POST'])
+def get_report_size(id):
+	report_id = request.form['report_id']
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			report_data_content = rd_model.get_report_size(mongo,report_id,id)
+			if(report_data_content):
+				return dumps(report_data_content)
+			else:
+				res = {
+					'status': 'False',
+					'message' : "No Report Found" 
+				}
+				return res
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)	
+
 
 # search report by title:
 @app.route("/user/reports/<id>/check-report", methods=['POST'])
@@ -217,14 +247,55 @@ def delete_report(id):
 	userData = user.find_by_userid(mongo,id)
 	if(userData):
 		if ('userid' in session) and (userData['username'] == session['userid']):
-			report_content = report_model.delete_report(mongo,report_id,id)
-			if(report_content):
-				current_report_count = userData['no_of_report_created']
-				current_report_count = current_report_count - 1
-				updated_report_count = user.updateReportCount(mongo,userData['username'],current_report_count)
+			report_data_content = report_model.delete_report_data(mongo,report_id,id)
+			if(report_data_content):
+				report_content = rd_model.delete_report(mongo,report_id,id)
+				if(report_content):
+					current_report_count = userData['no_of_report_created']
+					current_report_count = current_report_count - 1
+					updated_report_count = user.updateReportCount(mongo,userData['username'],current_report_count)
+					res_data = {
+						'status':  'OK',
+						'message' : "Report Deleted Successfully"
+					}
+					return res_data
+				else:
+					res = {
+						'status': 'False',
+						'message' : "No Report Found" 
+					}
+					return res
+			
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)	
+
+# clear report data:
+@app.route("/user/reports/<id>/clear-report-data", methods=["POST"])
+def delete_report_data(id):
+	now = dt.now()
+	report_id = request.form['report_id']
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			report_data_content = rd_model.delete_report_data(mongo,report_id,id)
+			if(report_data_content):
+				# update report_last edit
+				# report_last_edit = dt.strptime(now.strftime("%d/%m/%Y %H:%M:%S"), "%Y-%m-%dT%H:%M:%S.%fZ")
+				# reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
+
 				res_data = {
 					'status':  'OK',
-					'message' : "Report Deleted Successfully"
+					'message' : "Report Cleared Successfully"
 				}
 				return res_data
 			else:
@@ -233,7 +304,6 @@ def delete_report(id):
 					'message' : "No Report Found" 
 				}
 				return res
-			
 		else:
 			response = {
 				'status' : "False",
@@ -434,7 +504,6 @@ def save_report(id):
 @app.route("/user/save-report-data/<id>/<report_id>", methods=['POST'])
 def save_report_data(id,report_id):
 	now = dt.now()
-	
 	RD_response = {
 		"status" : "",
 		"message" : ""
@@ -445,34 +514,52 @@ def save_report_data(id,report_id):
 			reportData = report_model.find_by_report_id(mongo,id,report_id)
 			if(reportData):
 
+				report_cols = []
+				colTypes = reportData['report_fields_type']
+
+				for (a, b) in zip(reportData['report_fields_name'], colTypes):
+					report_col = {
+						'report_fields_name' : a.replace(" ","_").replace(".",""),
+						'report_fields_type' : b
+					}
+					report_cols.append(report_col)
+
 				# To Create the Data Object:
 				report_form_data = {
 					"report_data_id" : "RD"+id+"_"+now.strftime("%m%d%Y%H%M%S"),
 					"report_id" : report_id,
 					"report_created_by" : id
 				}
+				blank_field = ""
 				for f in reportData['report_fields_name']:
-					report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]
+					if(request.form[f.replace(" ","_")] != ""):
+						report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]
+					else:
+						blank_field = f.replace(" ","_")
+						break
+
+				# Validating the Data
+				if (blank_field != ""):
+					RD_response = {
+						"status" : "False",
+						"message" : blank_field+" Cannot be blank"
+					}
+					return render_template("ViewReport.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
+				
 
 				# Save the Report Data to DB:
 				added_RD = rd_model.save_report_data_to_DB(mongo,report_form_data)
 				if(added_RD):
+					# update report_last edit
+					# report_last_edit = dt.strptime(now.strftime("%d/%m/%Y %H:%M:%S"), "%Y-%m-%dT%H:%M:%S.%fZ")
+					# reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
+
 					return redirect(url_for('load_user_report',id=id,report_id=report_id))
 				else:
 					RD_response = {
 						"status" : "False",
 						"message" : "Some thing went wrong"
 					}
-					report_cols = []
-					colTypes = reportData['report_fields_type']
-
-					for (a, b) in zip(reportData['report_fields_name'], colTypes):
-						report_col = {
-							'report_fields_name' : a.replace(" ","_"),
-							'report_fields_type' : b
-						}
-						report_cols.append(report_col)
-
 					return render_template("ViewReport.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
 
 			else:
