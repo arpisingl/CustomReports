@@ -20,7 +20,7 @@
 
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/style.css') }}">
-
+	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/customCSS.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='commanPages/commanStyle.css') }}">
 
 	<!-- Linear icons -->
@@ -137,6 +137,9 @@
 										<div class="report-type">
 											Report Type : {{report_content['report_type']}}
 										</div>
+										<div class="report-type" id="report_size">
+											Report Size : 0
+										</div>
 										<div class="report-type">
 											Report Created by : 
 											<a href="#">
@@ -184,10 +187,14 @@
 						<div class="col-sm-5">
 							{% if rd_response %}
 								{% if rd_response.status == "OK" %}
-									{{rd_response.message}}
+									<div class="invalid-field">
+										{{rd_response.message}}
+									</div>
 								{% endif %}
 								{% if rd_response.status == "False" %}
-									{{rd_response.message}}
+									<div class="invalid-field">
+										{{rd_response.message}}
+									</div>
 								{% endif %}
 							{% endif %}
 
@@ -216,7 +223,7 @@
 										Add Data
 										<span class="lnr lnr-file-add"></span>
 									</button>
-									<button class="btn btn-danger" type="button">
+									<button class="btn btn-danger" type="button" onclick="delete_report_data()">
 										Clear All Data
 										<span class="lnr lnr-warning"></span>
 									</button>

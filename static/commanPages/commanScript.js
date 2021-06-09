@@ -6,6 +6,8 @@ $(document).ready(function(){
 	urls = url.split("/")
 	userid = urls[urls.length-2];
 	report_id = urls[urls.length-1];
+
+	getReportSize();
 });
 
 function search_report_on_report_page() {
@@ -60,4 +62,65 @@ function delete_report(){
 		});
 
 	}
+}
+
+function delete_report_data(){
+	var confirm_del = confirm("Are you sure! You Are clearing the report Data");
+	var post_data = {};
+
+	if (confirm_del){
+
+		if(report_id){
+			post_data = {
+				'report_id' : report_id,
+			}
+		}
+		$.ajax({
+			url : "/user/reports/"+userid+"/clear-report-data",
+			data : post_data,
+			type : 'POST',
+			dataType : 'json',
+			success:  function(res){
+				if(res.status === "False"){
+					alert(res.message);
+				}
+				else if(res.status === "OK"){
+					alert(res.message);
+					if(userid){
+						window.location.href = "/user/report/"+userid+"/"+report_id;
+					}
+				}
+			} 
+		});
+	}
+}
+
+// 
+function getReportSize(){
+	
+	var post_data = {};
+
+	if(report_id){
+		post_data = {
+			'report_id' : report_id,
+		}
+	}
+	$.ajax({
+		url : "/user/reports/"+userid+"/report-size",
+		data : post_data,
+		type : 'POST',
+		dataType : 'json',
+		success:  function(res){
+			if(res.status === "False"){
+				alert(res.message);
+			}
+			else{
+				for (var i = 0; i < res.length; i++) {
+					if(res[i]._id === report_id){
+						$("#report_size").html("Report Size : "+res[0].count);
+					}
+				}
+			}
+		} 
+	});
 }
