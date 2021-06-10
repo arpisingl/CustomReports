@@ -143,17 +143,37 @@
 												<option value="text">Text</option>
 												<option value="number">Number</option>
 												<option value="date">Date</option>
-												<option value="check_box">Check Box</option>
-												<option value="radio_button">Radio Button</option>
-												<option value="text_area">Text Area</option>
-												<option value="image">Image</option>
+												<option value="checkbox">Check Box</option>
+												<option value="radio">Radio Button</option>
+												<option value="textarea">Text Area</option>
+												<option value="img">Image</option>
 											</select>
 										</div>
 
-										<div class="col-sm-4">
+										<div class="label-input">
+											<input type="text" class="form-control" name="report_fields_label" placeholder="Enter your field Label">	
+										</div>
+
+
+										<!-- <div class="col-sm-4">
 											<button type="button" class="btn btn-success" onclick="addField()">
 												Add &nbsp; <span class="lnr lnr-plus-circle"></span>
 											</button>	
+										</div> -->
+									</div>
+									<br>
+									<div class="">
+										<div class="input-area row">
+											<div class="col-sm-6">
+												<button type="button" class="btn btn-success" onclick="addField()">
+													Add Field &nbsp; <span class="lnr lnr-plus-circle"></span>
+												</button>	
+											</div>
+											<div class="col-sm-4 label-input">
+												<button type="button" class="btn btn-info" onclick="addFieldWithLabel()">
+													Add Label &nbsp; <span class="lnr lnr-plus-circle"></span>
+												</button>	
+											</div>
 										</div>
 									</div>
 								</div>	

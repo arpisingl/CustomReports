@@ -11,8 +11,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -247,9 +247,9 @@ def delete_report(id):
 	userData = user.find_by_userid(mongo,id)
 	if(userData):
 		if ('userid' in session) and (userData['username'] == session['userid']):
-			report_data_content = report_model.delete_report_data(mongo,report_id,id)
+			report_data_content = rd_model.delete_report_data(mongo,report_id,id)
 			if(report_data_content):
-				report_content = rd_model.delete_report(mongo,report_id,id)
+				report_content = report_model.delete_report(mongo,report_id,id)
 				if(report_content):
 					current_report_count = userData['no_of_report_created']
 					current_report_count = current_report_count - 1
@@ -290,8 +290,8 @@ def delete_report_data(id):
 			report_data_content = rd_model.delete_report_data(mongo,report_id,id)
 			if(report_data_content):
 				# update report_last edit
-				# report_last_edit = dt.strptime(now.strftime("%d/%m/%Y %H:%M:%S"), "%Y-%m-%dT%H:%M:%S.%fZ")
-				# reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
+				report_last_edit = now.strftime("%d/%m/%Y %H:%M:%S")
+				reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
 
 				res_data = {
 					'status':  'OK',
@@ -461,9 +461,9 @@ def save_report(id):
 			report_fields_name = request.form.getlist('report_fields_name[]')
 			report_fields_type = request.form.getlist('report_fields_type[]')
 			reprot_last_edit = request.form['reprot_last_edit']
-			
 			new_report_last_edit = dt.strptime(reprot_last_edit, "%Y-%m-%dT%H:%M:%S.%fZ")
 			
+
 			report_data = {
 				'report_id' : report_id,
 				'report_title' : report_title,
@@ -475,6 +475,12 @@ def save_report(id):
 				'reprot_last_edit' : new_report_last_edit
 			}
 
+			for (a, b) in zip(report_fields_name, report_fields_type):
+				if (b == "checkbox" or b == "radio" or b == "select"):
+					print(a)
+					report_data[a] = request.form.getlist('labels['+a+'][]')
+			
+			
 			saved_report = report_model.save_report_to_DB(mongo,report_data)
 			current_report_count = userData['no_of_report_created']
 			current_report_count = current_report_count + 1
@@ -551,8 +557,8 @@ def save_report_data(id,report_id):
 				added_RD = rd_model.save_report_data_to_DB(mongo,report_form_data)
 				if(added_RD):
 					# update report_last edit
-					# report_last_edit = dt.strptime(now.strftime("%d/%m/%Y %H:%M:%S"), "%Y-%m-%dT%H:%M:%S.%fZ")
-					# reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
+					report_last_edit = now.strftime("%d/%m/%Y %H:%M:%S")
+					reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
 
 					return redirect(url_for('load_user_report',id=id,report_id=report_id))
 				else:
@@ -578,5 +584,5 @@ def save_report_data(id,report_id):
 		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
-	app.run()
-# 	app.run(debug=True, host="0.0.0.0", port=3000)
+	# app.run()
+	app.run(debug=True, host="0.0.0.0", port=3000)

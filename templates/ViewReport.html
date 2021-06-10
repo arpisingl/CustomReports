@@ -210,12 +210,37 @@
 										{{ field.report_fields_name }} :
 										<!-- : {{ field.report_fields_type}} -->
 									</div>
-									<div class="input-area">
-										<input type="{{field.report_fields_type}}" 
-										name="{{field.report_fields_name}}" 
-										placeholder="{{field.report_fields_name}}"
-										class="form-control">
-									</div>
+									{% if field.report_fields_type == 'text' %}
+										<div class="input-area">
+											<input type="{{field.report_fields_type}}" 
+											name="{{field.report_fields_name}}" 
+											placeholder="{{field.report_fields_name}}"
+											class="form-control">
+										</div>
+									{% endif %}
+									{% if field.report_fields_type == 'number' %}
+										<div class="input-area">
+											<input type="{{field.report_fields_type}}" 
+											name="{{field.report_fields_name}}" 
+											placeholder="{{field.report_fields_name}}"
+											class="form-control">
+										</div>
+									{% endif %}
+									{% if field.report_fields_type == 'textarea' %}
+										<textarea name="{{field.report_fields_name}}" 
+										rows="4" cols="50" class="form-control">
+											
+										</textarea>
+									{% endif %}
+									{% if field.report_fields_type == 'radio' %}
+										<input type="radio" name="{{field.report_fields_name}}" >
+									{% endif %}
+
+									{% if field.report_fields_type == 'checkbox' %}
+										<input type="checkbox" name="{{field.report_fields_name}}">
+										<!-- <label for="vehicle1"> I have a bike</label><br> -->
+									{% endif %}
+
 								{% endfor %}
 
 								<div class="input-submit">

@@ -1,14 +1,41 @@
 
 fieldNames = [];
 fieldTypes = [];
+checkboxLabels = [];
+radioLabels = [];
+selectLabels = [];
 userid = "";
+var label_data = {};
+var data = {};
+
 $(document).ready(function(){
 	fieldNames = [];
 	fieldTypes = [];
+	checkboxLabels = [];
+	radioLabels = [];
+	selectLabels = [];
+	data = {};
+	label_data = {};
+
 	url = window.location.href;
 	urls = url.split("/")
 	userid = urls[urls.length-1];
 	// console.log(userid);
+
+
+	$("#report_fields_type").change(function(){
+		var selectedType= $("#report_fields_type").val();
+		
+		if(selectedType === "radio" || selectedType === "checkbox" || selectedType === "select"){
+			$(".add-but").css("display","none");
+			$(".label-input").css("display","block");
+		}
+		else{
+			$(".add-but").css("display","block");
+			$(".label-input").css("display","none");
+		}
+
+	})
 });
 
 
@@ -23,31 +50,35 @@ function saveReport(){
 	else if( report_type == ""){
 		alert("Please select the type of this report");
 	}
-	else{
-		data = {
-			"report_id" : Date.now(),
-			"report_title" :report_title,
-			"report_type" : report_type,
-			"report_created_by" : userid,
-			"report_created_on" : JSON.parse(JSON.stringify(new Date())),
-			"report_fields_name" : fieldNames,
-			"report_fields_type" : fieldTypes,
-			"reprot_last_edit" : JSON.parse(JSON.stringify(new Date()))
-		};
+	else{	
+		if(label_data){
 
+			data["report_id"] = Date.now();
+			data["report_title"] = report_title;
+			data["report_type"] = report_type;
+			data["report_created_by"] = userid;
+			data["report_created_on"] = JSON.parse(JSON.stringify(new Date()));
+			data["report_fields_name"] = fieldNames;
+			data["report_fields_type"] = fieldTypes;
+			data["reprot_last_edit"] = JSON.parse(JSON.stringify(new Date()));
+			data['labels'] = label_data;
+		}
+		
 		// Ajax Request
 		$.ajax({
 			url: '/user/save-report/'+userid,
 			type: 'POST',
 			data: data,
-			datatype: 'json',
-			success: function(data){
-				// console.log(data)
-
-				alert(data['message']);
+			datatype: 'application/json',
+			success: function(res){
+				alert(res['message']);
 
 				fieldNames = [];
 				fieldTypes = [];
+				checkboxLabels = [];
+				radioLabels = [];
+				selectLabels = [];
+				data = {};
 				$("input[name = 'report_title']").val("");
 				$("#report_type").val("");
 
@@ -72,9 +103,6 @@ function addField(){
 	else{
 		fieldNames.push(report_fields_name);
 		fieldTypes.push(report_fields_type);
-		
-		// alert("Field Added Successfully");
-
 		$("input[name = 'report_fields_name']").val("");
 		$("#report_fields_type").val("");
 		
@@ -92,14 +120,43 @@ function addField(){
 			);
 			
 			$("#field_part").css("display","block");
-
+			$(".label-input").css("display","none");
 		}
 		else{
 			$("#field_part").html("No Field Added");
 			$("#field_part").css("display","block");
 		}
+	}
 
+}
 
+function addFieldWithLabel(){
+
+	var report_fields_name = $("input[name = 'report_fields_name']").val();
+	var report_fields_type = $("#report_fields_type").val();
+	var report_fields_label = $("input[name = 'report_fields_label']").val();
+
+	if(report_fields_name === "" || report_fields_type === "" || report_fields_label === ""){
+		alert("Please Fill all the Fields")	
+	}
+	else{
+		
+		if(report_fields_type === "radio"){
+			radioLabels.push(report_fields_label);
+			label_data[report_fields_name] = radioLabels
+		}
+		else if(report_fields_type === "checkbox"){
+			checkboxLabels.push(report_fields_label);
+			label_data[report_fields_name] = checkboxLabels
+		}
+		else if(report_fields_type === "select"){
+			selectLabels.push(report_fields_label);
+			label_data[report_fields_name] = selectLabels
+		}
+		else{
+
+		}
+		$("input[name = 'report_fields_label']").val("");
 	}
 
 }
@@ -111,19 +168,19 @@ function covertFieldTypeToMode(type){
 	else if(type == "number" ){
 		return "| 123 |"
 	}
-	else if(type == "check_box" ){
+	else if(type == "checkbox" ){
 		return "| <span class='lnr lnr-checkmark-circle'></span> |"
 	}
-	else if(type == "radio_button" ){
+	else if(type == "radio" ){
 		return "| <span class='lnr lnr-circle-minus'></span> |"
 	}
-	else if(type == "text_area" ){
+	else if(type == "textarea" ){
 		return "| abc |"
 	}
 	else if(type == "date" ){
 		return "| DD-MM-YY |"
 	}
-	else if(type == "image" ){
+	else if(type == "img" ){
 		return "| Image |"
 	}
 	else{

@@ -179,3 +179,11 @@
     /*float: right;*/
 }
 
+
+.label-input{
+    display: none;
+}
+
+.add-but{
+    display: block;
+}
