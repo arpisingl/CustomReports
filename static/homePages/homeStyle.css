@@ -4,7 +4,6 @@
 
 .header-section{
 	background-color: #eceff1;
-    /* border: 1px solid; */
     padding: 20px;
 
 }
@@ -14,16 +13,12 @@
 }
 
 .menu-bar{
-	background-color: darkgreen;
-    /* border: 1px solid; */
-    /*padding: 2px;*/
-    /*border-radius: 5px;*/
+	background-color: #4e6ff3;
 }
 
 .menu-options{
-	background-color: #247724;
+	background-color: #4e6ff3;
     padding: 5px;
-    /*border-right: 1px solid black;*/
     text-align: center;
     font-size: 15px;
     color: cornsilk;
@@ -31,7 +26,7 @@
 }
 
 .menu-options:hover{
-	background-color: #0e3e08;
+	background-color: #4461c1;
 }
 
 .a_links{
@@ -44,17 +39,16 @@
 }
 
 .welcome_user{
-	
-	color: darkgreen;
-    background-color: #dccbcb;
+	color: #000364;
+    background-color: #76aceaa1;
     padding: 15px;
     font-weight: 500;
     font-size: 28px;
 
 }
 .text_heading{	
-	color: #5e0064;
-    background-color: #cbd5dc;
+	color: #0d2a5f;
+    background-color: #4c95da8f;
     padding: 12px;
     font-weight: 500;
     font-size: 24px;
@@ -67,14 +61,13 @@
 
 .body-section{
 	padding: 20px;
-	/*background-color: green;*/
 }
 
 .blocks{
 	padding: 30px;
     border: 1px solid;
     border-radius: 0.5em;
-    background-color: #6b6990;
+    background-color: #4e6ff3;
     color: white;
     text-align: center;
     font-size: 22px;
@@ -82,12 +75,7 @@
 
 .blocks:hover{
 	cursor: pointer;
-	background-color: #421e58;
-}
-
-.body_cover{
-	/*background-color: yellow;
-	padding: 5px;*/
+	background-color: #314fce;
 }
 
 .right_pannel{
@@ -107,13 +95,14 @@
     padding-left: 20px;
     border-radius: 0.3em;
     margin-bottom: 2px;
-    background-color: #f8f9fd;
+    background-color: #eceff1;
     width: fit-content;
+    color: darkblue;
     padding-right: 20px;
 }
 
 .list_style:hover{
-    background-color: #6b6990;
+    background-color: #2921ca;
     color: white;
     cursor: pointer;
 }
@@ -175,10 +164,6 @@
     border-radius: 20px;
     color: aliceblue;
 }
-.field-type{
-    /*float: right;*/
-}
-
 
 .label-input{
     display: none;

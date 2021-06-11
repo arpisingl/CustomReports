@@ -10,6 +10,8 @@
 	<title>Report : Not Found</title>
 	{% endif %}
 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -210,6 +212,8 @@
 										{{ field.report_fields_name }} :
 										<!-- : {{ field.report_fields_type}} -->
 									</div>
+
+									<!-- for the String Inputs -->
 									{% if field.report_fields_type == 'text' %}
 										<div class="input-area">
 											<input type="{{field.report_fields_type}}" 
@@ -218,6 +222,8 @@
 											class="form-control">
 										</div>
 									{% endif %}
+
+									<!-- for the Number Inputs -->
 									{% if field.report_fields_type == 'number' %}
 										<div class="input-area">
 											<input type="{{field.report_fields_type}}" 
@@ -226,19 +232,69 @@
 											class="form-control">
 										</div>
 									{% endif %}
+
+									<!-- for the Date Inputs -->
+									{% if field.report_fields_type == 'date' %}
+										<div class="input-area">
+											<input type="{{field.report_fields_type}}" 
+											name="{{field.report_fields_name}}" 
+											placeholder="{{field.report_fields_name}}"
+											class="form-control">
+										</div>
+									{% endif %}
+
+									<!-- for the Text Area Inputs -->
 									{% if field.report_fields_type == 'textarea' %}
 										<textarea name="{{field.report_fields_name}}" 
 										rows="4" cols="50" class="form-control">
 											
 										</textarea>
 									{% endif %}
+
+									<!-- for the Radio Buttons Inputs -->
 									{% if field.report_fields_type == 'radio' %}
-										<input type="radio" name="{{field.report_fields_name}}" >
+
+										{% if report_content[field.report_fields_name] %}
+											{% for label in report_content[field.report_fields_name] %}
+											<!-- <div class="input-area"> -->
+												<input type="radio" id="{{label}}" name="{{field.report_fields_name}}" 
+												value="{{label}}">
+												<label for="{{label}}">{{label}}</label> &nbsp; &nbsp;
+											<!-- </div> -->
+											{% endfor %}
+										{% endif %}
+										{% if not report_content[field.report_fields_name] %}
+											No Lable Available !
+										{% endif %}
 									{% endif %}
 
+									<!-- for the Checkbox Inputs -->
 									{% if field.report_fields_type == 'checkbox' %}
-										<input type="checkbox" name="{{field.report_fields_name}}">
-										<!-- <label for="vehicle1"> I have a bike</label><br> -->
+										{% if report_content[field.report_fields_name] %}
+											{% for label in report_content[field.report_fields_name] %}
+											<!-- <div class="input-area"> -->
+												<input type="checkbox" id="{{label}}" name="{{field.report_fields_name}}" value="{{label}}">
+												<label for="{{label}}">{{label}}</label> &nbsp; &nbsp;
+											<!-- </div> -->
+											{% endfor %}
+										{% endif %}
+										{% if not report_content[field.report_fields_name] %}
+											No Checkbox Available !
+										{% endif %}
+									{% endif %}
+
+									<!-- for the Select Inputs -->
+									{% if field.report_fields_type == 'select' %}
+										{% if report_content[field.report_fields_name] %}
+											<select name="{{field.report_fields_name}}">
+												{% for label in report_content[field.report_fields_name] %}
+													  <option value="{{label}}">{{label}}</option>
+												{% endfor %}
+											</select>
+										{% endif %}
+										{% if not report_content[field.report_fields_name] %}
+											No Checkbox Available !
+										{% endif %}
 									{% endif %}
 
 								{% endfor %}
