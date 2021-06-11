@@ -11,8 +11,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -537,9 +537,12 @@ def save_report_data(id,report_id):
 					"report_created_by" : id
 				}
 				blank_field = ""
-				for f in reportData['report_fields_name']:
+				for (f, t) in zip(reportData['report_fields_name'], colTypes):
 					if(request.form[f.replace(" ","_")] != ""):
-						report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]
+						if (t == "checkbox"):
+							report_form_data[f.replace(" ","_")] = request.form.getlist(f.replace(" ","_"))
+						else:
+							report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]	
 					else:
 						blank_field = f.replace(" ","_")
 						break
@@ -567,7 +570,6 @@ def save_report_data(id,report_id):
 						"message" : "Some thing went wrong"
 					}
 					return render_template("ViewReport.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
-
 			else:
 				return render_template("ViewReport.html", data = userData)
 		else:
@@ -584,5 +586,5 @@ def save_report_data(id,report_id):
 		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
-	# app.run()
-	app.run(debug=True, host="0.0.0.0", port=3000)
+	app.run()
+	# app.run(debug=True, host="0.0.0.0", port=3000)

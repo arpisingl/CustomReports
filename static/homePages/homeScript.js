@@ -105,7 +105,9 @@ function addField(){
 		fieldTypes.push(report_fields_type);
 		$("input[name = 'report_fields_name']").val("");
 		$("#report_fields_type").val("");
-		
+		radioLabels = [];
+		checkboxLabels = [];
+		selectLabels = [];
 		if(fieldNames.length > 0 && fieldTypes.length> 0){
 			
 			$("#field_part").append(
@@ -143,15 +145,18 @@ function addFieldWithLabel(){
 		
 		if(report_fields_type === "radio"){
 			radioLabels.push(report_fields_label);
-			label_data[report_fields_name] = radioLabels
+			label_data[report_fields_name] = radioLabels;
+			
 		}
 		else if(report_fields_type === "checkbox"){
 			checkboxLabels.push(report_fields_label);
-			label_data[report_fields_name] = checkboxLabels
+			label_data[report_fields_name] = checkboxLabels;
+			
 		}
 		else if(report_fields_type === "select"){
 			selectLabels.push(report_fields_label);
-			label_data[report_fields_name] = selectLabels
+			label_data[report_fields_name] = selectLabels;
+			
 		}
 		else{
 
@@ -182,6 +187,9 @@ function covertFieldTypeToMode(type){
 	}
 	else if(type == "img" ){
 		return "| Image |"
+	}
+	else if(type == "select" ){
+		return "| Select |"
 	}
 	else{
 		return "| abc |"
