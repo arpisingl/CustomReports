@@ -126,7 +126,7 @@
 										</div>
 									</div>
 									<div class="col-sm-4">
-										<a href="{{url_for('load_user_report',id = report_content['report_created_by'], report_id = report_content['report_id'])}}">
+										<a href="{{url_for('load_report_data',id = report_content['report_created_by'], report_id = report_content['report_id'])}}">
 											<div class="btn btn-success">
 												Show Report Data
 												<span class="lnr lnr-eye"></span>
@@ -286,11 +286,14 @@
 									<!-- for the Select Inputs -->
 									{% if field.report_fields_type == 'select' %}
 										{% if report_content[field.report_fields_name] %}
-											<select name="{{field.report_fields_name}}">
-												{% for label in report_content[field.report_fields_name] %}
-													  <option value="{{label}}">{{label}}</option>
-												{% endfor %}
-											</select>
+											<div class="input-area">
+												<select name="{{field.report_fields_name}}" class="form-control">
+													<option value="">Select your {{field.report_fields_name}}</option>
+													{% for label in report_content[field.report_fields_name] %}
+														  <option value="{{label}}">{{label}}</option>
+													{% endfor %}
+												</select>
+											</div>
 										{% endif %}
 										{% if not report_content[field.report_fields_name] %}
 											No Checkbox Available !

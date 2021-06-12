@@ -138,8 +138,6 @@ def load_view_reports(id):
 @app.route("/user/report/<id>/<report_id>")
 def load_user_report(id,report_id):
 	userData = user.find_by_userid(mongo,id)
-	
-
 	if(userData):
 		if ('userid' in session) and (userData['username'] == session['userid']):
 			
@@ -171,6 +169,43 @@ def load_user_report(id,report_id):
 		}
 		return render_template("index.html", response = response)
 	
+# User Report Data Content
+@app.route("/user/report-data/<id>/<report_id>")
+def load_report_data(id,report_id):
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+			
+				report_data_list = []
+				report_content_data = rd_model.getAllDataById(mongo,id,report_id)
+				for row in report_content_data:
+					report_data_list.append(row)
+
+
+				# return dumps(report_content_data)
+				if(report_content_data):
+					return render_template("ViewReportData.html", data = userData, report_content = reportData, ReportData = report_data_list)		
+			
+			else:
+				return render_template("ViewReportData.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
+
+
+
 # Model Pages...
 
 # calculate the report_size
@@ -316,6 +351,40 @@ def delete_report_data(id):
 			'message' : "Invalid Userid"
 		}
 		return render_template("index.html", response = response)	
+
+# Delete document from a ReportData
+@app.route("/user/report-data/<id>/<report_id>/<report_data_id>/delete")
+def delete_report_row(id,report_id,report_data_id):
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+				# delete the current row:
+				deleted_row = rd_model.deleteByReportDataID(mongo,id,report_id,report_data_id)
+
+				if deleted_row:
+					report_data_list = []
+					report_content_data = rd_model.getAllDataById(mongo,id,report_id)
+					for row in report_content_data:
+						report_data_list.append(row)
+
+					if(report_content_data):
+						return render_template("ViewReportData.html", data = userData, report_content = reportData, ReportData = report_data_list)
+			else:
+				return render_template("ViewReportData.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
 
 #check_Exsiting_User : 
 @app.route("/check-existing-userid", methods=['POST'])
@@ -587,5 +656,5 @@ def save_report_data(id,report_id):
 
 if __name__ == "__main__":
 	app.run()
-# 	app.run(debug=True, host="0.0.0.0", port=3000)
+	# app.run(debug=True, host="0.0.0.0", port=3000)
 

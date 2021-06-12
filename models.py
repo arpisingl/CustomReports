@@ -77,3 +77,11 @@ class ReportData():
 		report_data_content = mongo.db.ReportData.aggregate([{ "$match" : {"report_id":report_id, "report_created_by" : id} }, 
 															 { "$group" : {"_id":"$report_id", "count" : {"$sum" : 1} } }])
 		return report_data_content
+
+	def getAllDataById(mongo,id,report_id):
+		report_data_content = mongo.db.ReportData.find({"report_id":report_id, "report_created_by" : id},{"_id":0,"report_id":0,"report_created_by":0})
+		return report_data_content
+
+	def deleteByReportDataID(mongo,id,report_id,report_data_id):
+		delete_report_data = mongo.db.ReportData.delete_one({"report_id":report_id, "report_created_by" : id, "report_data_id" : report_data_id})
+		return delete_report_data

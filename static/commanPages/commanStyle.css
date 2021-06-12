@@ -83,3 +83,13 @@
     margin: 3px;
     margin-top: 10px;
 }
+
+.show-content{
+    overflow-y: auto;
+    height: 70%;
+    /*border-radius: 1em;*/
+}
+
+.btn-area{
+    /*float: right;*/
+}
