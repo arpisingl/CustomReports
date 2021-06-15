@@ -11,8 +11,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -514,6 +514,44 @@ def update_password(id):
 		return render_template("ForgotPas.html",status="Incorrect Password")
 	
 
+# download report_data :
+@app.route("/user/download-report/<id>", methods=['POST'])
+def download_report_data(id):
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			report_id = request.form['report_id']
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+			
+				report_data_list = []
+				report_content_data = rd_model.getAllDownloadableDataById(mongo,id,report_id)
+				for row in report_content_data:
+					report_data_list.append(row)
+
+
+				# return dumps(report_content_data)
+				if(report_content_data):
+					res_ob = {
+						'report_title' : reportData['report_title'],
+						'report_content' : report_data_list,
+						'report_cols' : reportData['report_fields_name']
+					}
+					return res_ob
+			else:
+				return render_template("ViewReportData.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
 
 # Save the New Report : 
 @app.route("/user/save-report/<id>", methods=['POST'])
@@ -655,6 +693,6 @@ def save_report_data(id,report_id):
 		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
-	app.run()
-	# app.run(debug=True, host="0.0.0.0", port=3000)
+	# app.run()
+	app.run(debug=True, host="0.0.0.0", port=3000)
 

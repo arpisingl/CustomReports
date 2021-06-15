@@ -39,6 +39,8 @@
 
 	<script type="text/javascript" src="{{ url_for('static',filename='commanPages/commanScript.js') }}"></script>
 
+	<script type="text/javascript" src="{{ url_for('static',filename='commanPages/downloadFile.js') }}"></script>
+
 </head>
 <body>
 	<DIV class="fluid-container bck_color">
@@ -171,7 +173,7 @@
 										Share Report
 										<span class="lnr lnr-location"></span>
 									</button>
-									<button class="btn btn-primary btns">
+									<button class="btn btn-primary btns" type="button" onclick="download_data()">
 										Download Report 
 										<span class="lnr lnr-download"></span>
 									</button>
