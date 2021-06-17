@@ -18,6 +18,10 @@ function download_data(){
 		method: "POST",
 		success : function(res){
 			  
+            var fileNameCSV = res.report_title + ".csv";
+            var fileNameEXCEL = res.report_title + ".xls";
+            var jsonObject = res.report_content; 
+
             if(jsonObject.length > 0){
                 for (var i = 0; i < jsonObject.length; i++) {
                     for (const key in jsonObject[i]) {
@@ -26,7 +30,7 @@ function download_data(){
                             var arr_key = '';
                             for (var akey = 0; akey < jsonObject[i][key].length; akey++) {
                                 if (arr_key != ''){
-                                    arr_key += ',';
+                                    arr_key += '#';
                                 }
                                 arr_key += jsonObject[i][key][akey];
                             }
@@ -35,9 +39,13 @@ function download_data(){
                     }   
                 }
                 
-                // // Convert JSON Into Excel Format
-                // // download data here
-                download(fileName , ConvertToExcel(jsonObject));
+                // // Convert JSON Into File Format
+
+                // CSV File
+                // download(fileNameCSV , ConvertToCSV(jsonObject));   
+
+                // Excel File
+                download(fileNameEXCEL , ConvertToExcel(jsonObject));
             }
             else{
                 alert("No Data Available");
