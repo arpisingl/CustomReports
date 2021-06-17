@@ -11,8 +11,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -525,8 +525,21 @@ def download_report_data(id):
 			if(reportData):
 			
 				report_data_list = []
+
+				textareaList = []
 				report_content_data = rd_model.getAllDownloadableDataById(mongo,id,report_id)
+
+				for (a, b) in zip(reportData['report_fields_name'], reportData['report_fields_type']):
+					if b == 'textarea':
+						textareaList.append(a)
+
 				for row in report_content_data:
+					for ta in textareaList:
+						if (ta in row):
+							row[ta] = row[ta].replace("\n","").replace("\r","").replace("\t","")
+						else:
+							continue
+					
 					report_data_list.append(row)
 
 
@@ -535,7 +548,8 @@ def download_report_data(id):
 					res_ob = {
 						'report_title' : reportData['report_title'],
 						'report_content' : report_data_list,
-						'report_cols' : reportData['report_fields_name']
+						'report_cols' : reportData['report_fields_name'],
+
 					}
 					return res_ob
 			else:
@@ -693,6 +707,6 @@ def save_report_data(id,report_id):
 		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
-	# app.run()
-	app.run(debug=True, host="0.0.0.0", port=3000)
+	app.run()
+	# app.run(debug=True, host="0.0.0.0", port=3000)
 

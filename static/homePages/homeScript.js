@@ -20,8 +20,6 @@ $(document).ready(function(){
 	url = window.location.href;
 	urls = url.split("/")
 	userid = urls[urls.length-1];
-	console.log(userid);
-
 
 	$("#report_fields_type").change(function(){
 		var selectedType= $("#report_fields_type").val();
@@ -234,7 +232,8 @@ function download_data_by(r_id){
         type: "application/json",
         method: "POST",
         success : function(res){
-            var fileName = res.report_title + ".xls";
+            var fileNameCSV = res.report_title + ".csv";
+            var fileNameEXCEL = res.report_title + ".xls";
             var jsonObject = res.report_content; 
 
             if(jsonObject.length > 0){
@@ -245,7 +244,7 @@ function download_data_by(r_id){
 	                        var arr_key = '';
 	                        for (var akey = 0; akey < jsonObject[i][key].length; akey++) {
 	                            if (arr_key != ''){
-	                                arr_key += ',';
+	                                arr_key += '#';
 	                            }
 	                            arr_key += jsonObject[i][key][akey];
 	                        }
@@ -254,9 +253,13 @@ function download_data_by(r_id){
 	                }   
 	            }
 	            
-	            // // Convert JSON Into Excel Format
-	            // // download data here
-	            download(fileName , ConvertToExcel(jsonObject));
+	            // // Convert JSON Into File Format
+
+	            // CSV File
+	            // download(fileNameCSV , ConvertToCSV(jsonObject));   
+
+	            // Excel File
+	            download(fileNameEXCEL , ConvertToExcel(jsonObject));
             }
             else{
             	alert("No Data Available");
