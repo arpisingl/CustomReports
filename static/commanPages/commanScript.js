@@ -7,6 +7,11 @@ $(document).ready(function(){
 	userid = urls[urls.length-2];
 	report_id = urls[urls.length-1];
 
+	$('#form_link').click(function(){
+		window.location.href = "/report-form/"+userid+"/"+report_id;
+	});
+
+
 	getReportSize();
 });
 
@@ -123,5 +128,10 @@ function getReportSize(){
 			}
 		} 
 	});
+}
+
+function shareReport(){
+	// /report-form/<id>
+	$("#share_link").css("display","flex");
 }
 

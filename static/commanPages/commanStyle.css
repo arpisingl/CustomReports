@@ -93,3 +93,48 @@
 .btn-area{
     /*float: right;*/
 }
+
+#share_link{
+    display: none;
+}
+
+.share_link_area{
+    margin-top: 20px;
+    border-radius: 0.5em;
+    padding: 10px;
+    background-color: #fafafa;
+    display: flex;
+}
+
+.form-link-box{
+    border-radius: 0.5em;
+    background-color: #353ea7;
+    display: inline-block;
+    color: #4eefef;
+    padding: 3px;
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.form-link-box:hover{
+    cursor: pointer;
+}
+
+.copy-btn{
+    background-color: #4e6ff3;
+    display: inline-block;
+    color: #fff;
+    border-radius: 0.5em;
+    padding: 3px;
+    border: none;
+    width: fit-content;
+    height: fit-content;
+    margin-left: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.a_link{
+    text-decoration: none;
+}   

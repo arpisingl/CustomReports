@@ -168,6 +168,34 @@ def load_user_report(id,report_id):
 			'message' : "Invalid Userid"
 		}
 		return render_template("index.html", response = response)
+
+# view Report Form
+@app.route("/report-form/<id>/<report_id>", methods = ['GET'])
+def load_report_form(id,report_id):
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		reportData = report_model.find_by_report_id(mongo,id,report_id)
+
+		if(reportData):
+			report_cols = []
+			colTypes = reportData['report_fields_type']
+
+			for (a, b) in zip(reportData['report_fields_name'], colTypes):
+				report_col = {
+					'report_fields_name' : a.replace(" ","_").replace(".",""),
+					'report_fields_type' : b
+				}
+				report_cols.append(report_col)
+			# return dumps(report_cols)
+			return render_template("ReportForm.html", data = userData, report_content = reportData, report_cols = report_cols)
+		else:
+			return render_template("ReportForm.html", data = userData)
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
 	
 # User Report Data Content
 @app.route("/user/report-data/<id>/<report_id>")
@@ -626,6 +654,79 @@ def save_report(id):
 		}
 		return render_template("index.html", response = response)		
 
+# Save Report Form
+@app.route("/user/save-report-data/<id>/<report_id>", methods=['POST'])
+def save_report_form(id,report_id):
+	now = dt.now()
+	RD_response = {
+		"status" : "",
+		"message" : ""
+	}
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		
+		reportData = report_model.find_by_report_id(mongo,id,report_id)
+		if(reportData):
+
+			report_cols = []
+			colTypes = reportData['report_fields_type']
+
+			for (a, b) in zip(reportData['report_fields_name'], colTypes):
+				report_col = {
+					'report_fields_name' : a.replace(" ","_").replace(".",""),
+					'report_fields_type' : b
+				}
+				report_cols.append(report_col)
+
+			# To Create the Data Object:
+			report_form_data = {
+				"report_data_id" : "RD"+id+"_"+now.strftime("%m%d%Y%H%M%S"),
+				"report_id" : report_id,
+				"report_created_by" : id
+			}
+			blank_field = ""
+			for (f, t) in zip(reportData['report_fields_name'], colTypes):
+				if(request.form[f.replace(" ","_")] != ""):
+					if (t == "checkbox"):
+						report_form_data[f.replace(" ","_")] = request.form.getlist(f.replace(" ","_"))
+					else:
+						report_form_data[f.replace(" ","_")] = request.form[f.replace(" ","_")]	
+				else:
+					blank_field = f.replace(" ","_")
+					break
+
+			# Validating the Data
+			if (blank_field != ""):
+				RD_response = {
+					"status" : "False",
+					"message" : blank_field+" Cannot be blank"
+				}
+				return render_template("ReportForm.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
+			
+
+			# Save the Report Data to DB:
+			added_RD = rd_model.save_report_data_to_DB(mongo,report_form_data)
+			if(added_RD):
+				# update report_last edit
+				report_last_edit = now.strftime("%d/%m/%Y %H:%M:%S")
+				reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
+
+				return redirect(url_for('load_report_form',id=id,report_id=report_id))
+			else:
+				RD_response = {
+					"status" : "False",
+					"message" : "Some thing went wrong"
+				}
+				return render_template("ReportForm.html", data = userData, report_content = reportData, report_cols = report_cols, rd_response = RD_response)
+		else:
+			return render_template("ReportForm.html", data = userData)
+		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
 
 # Save the Report Data
 @app.route("/user/save-report-data/<id>/<report_id>", methods=['POST'])
