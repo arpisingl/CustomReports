@@ -3,11 +3,11 @@
 <head>
 
 	{% if report_content %}
-	<title>Report : {{report_content['report_title']}}</title>
+	<title>Report Form : {{report_content['report_title']}}</title>
 	{% endif %}
 
 	{% if not report_content %}
-	<title>Report : Not Found</title>
+	<title>Report Form : Not Found</title>
 	{% endif %}
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,160 +44,13 @@
 </head>
 <body>
 	<DIV class="fluid-container bck_color">
-		<div class="header-section">
-			<div class="container">
-				<div class="menu-bar row">
-					<div class="col-sm-1 menu-options">
-						<a class="a_links" href="{{url_for('load_user_home', id=data.username)}}">
-							Home
-							<span class="lnr lnr-home"></span>
-						</a>
-					</div>
-					<div class="col-sm-1 menu-options">
-						<a class="a_links" href="{{url_for('load_view_reports', id=data.username)}}">
-							Reports
-						</a>
-					</div>
-					<div class="col-sm-7">
-						
-					</div>
-					<div class="col-sm-1">
-
-					</div>
-					<div class="col-sm-1 menu-options">
-						Profile
-						<span class="lnr lnr-user"></span>
-					</div>
-					<div class="col-sm-1 menu-options">
-						<a class="a_links" href="/logout/{{data.username}}">
-							Logout
-							<span class="lnr lnr-power-switch"></span>
-						</a>
-					</div>
-				</div>
-				<div class="welcome_user row">
-					<div class="col-sm-2">
-						
-					</div>
-					<div class="welcome_text col-sm-8">
-						Welcome 
-						<span id="username">{{ data.username }}</span>
-					</div>
-					<div class="col-sm-2">
-						
-					</div>
-				</div>
-				<div class="text_heading row">
-					<div class="col-sm-8">
-						{% if report_content %}
-							Report : {{ report_content.report_title }}
-						{% endif %}
-						{% if not report_content %}
-							Unknown report
-						{% endif %}
-					</div>
-					<div class="col-sm-4">
-						<div class="row">
-							<div class="">
-								<input type="text" class="form-control rounded-left" placeholder="Serach Report" name="report_name">
-							</div>
-							&nbsp;		
-							<div class="">
-								<button class="btn btn-success" onclick="search_report_on_report_page()">
-									Search 
-									<span class="lnr lnr-magnifier"></span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-			</div>
-		</div>
+		
 		<div class="body-section">
 			<div class="container">
 				{% if report_cols %}
 					<!-- {{report_content}} -->
 					<div class="row">
-						<div class="col-sm-7">
-							<div class="report_block col-sm-12">
-								<div class="row">
-									<div class="col-sm-8">
-										<div class="report-title">
-											{{report_content['report_title']}}
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<a href="{{url_for('load_report_data',id = report_content['report_created_by'], report_id = report_content['report_id'])}}">
-											<div class="btn btn-success">
-												Show Report Data
-												<span class="lnr lnr-eye"></span>
-											</div>
-
-										</a>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-sm-7">
-										<div class="report-type">
-											Report Type : {{report_content['report_type']}}
-										</div>
-										<div class="report-type" id="report_size">
-											Report Size : 0
-										</div>
-										<div class="report-type">
-											Report Created by : 
-											<a href="#">
-												{{report_content['report_created_by']}}
-											</a>
-										</div>
-										<div class="report-sub-title">
-											Report Created 
-											<span class="lnr lnr-calendar-full"></span> : {{report_content['report_created_on']}}
-										</div>
-										<div class="report-sub-title">
-											Last used 
-											<span class="lnr lnr-history"></span> : {{report_content['reprot_last_edit']}}
-										</div>
-									</div>
-								</div>
-								<br>
-								<div class="row">
-									{% for field in report_content['report_fields_name'] %}
-									<div class="report-fields">
-										{{field}}
-									</div>
-									{% endfor %}
-								</div>
-								<div class="row">
-									<div class="btn btn-success btns" id="form_link">
-										View Report Form
-									</div>
-									<button class="btn btn-primary btns" type="button" onclick="download_data()">
-										Download Report 
-										<span class="lnr lnr-download"></span>
-									</button>
-									<button class="btn btn-warning btns">
-										Modify Report
-										<span class="lnr lnr-pencil"></span>
-									</button>
-									<button class="btn btn-danger btns" onclick="delete_report()">
-										Delete Report
-										<span class="lnr lnr-trash"></span>
-									</button>
-									<button class="btn btn-info btns"  type="button" onclick="shareReport()">
-										Share Report
-										<span class="lnr lnr-location"></span>
-									</button>
-								</div>
-							</div>	
-							<div class="share_link_area" id="share_link">
-								<button class="copy-btn">
-									Copy Link
-								</button>
-							</div>	
-						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-8">
 							{% if rd_response %}
 								{% if rd_response.status == "OK" %}
 									<div class="invalid-field">
@@ -217,7 +70,7 @@
 
 							<!-- {{report_cols}} -->
 							<form class="form-part" 
-							action="{{url_for('save_report_data',id=data.username,report_id=report_content['report_id'])}}" method="POST">
+							action="{{url_for('save_report_form',id=data.username,report_id=report_content['report_id'])}}" method="POST">
 								{% for field in report_cols  %}
 									<div class="input-header">
 										{{ field.report_fields_name }} :
@@ -315,13 +168,9 @@
 
 								<div class="input-submit">
 									<button class="btn btn-success" type="submit">
-										Add Data
-										<span class="lnr lnr-file-add"></span>
+										Submit Report
 									</button>
-									<button class="btn btn-danger" type="button" onclick="delete_report_data()">
-										Clear All Data
-										<span class="lnr lnr-warning"></span>
-									</button>
+									
 								</div>
 							</form>
 						</div>
@@ -330,7 +179,7 @@
 
 				{% if not report_content %}
 					<h1>
-						Oops Report Not Found !
+						Oops Report Form Not Found !
 					</h1>
 				{% endif %}
 
