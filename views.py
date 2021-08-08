@@ -8,6 +8,8 @@ from models import Reports as report_model
 from models import ReportData as rd_model
 from datetime import datetime as dt
 from datetime import date
+# import pandas as pd
+# from pandas import DataFrame as df
 
 app = Flask(__name__)
 
@@ -570,6 +572,7 @@ def download_report_data(id):
 					
 					report_data_list.append(row)
 
+				# print(df(report_data_list))
 
 				# return dumps(report_content_data)
 				if(report_content_data):

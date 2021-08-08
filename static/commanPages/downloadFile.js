@@ -21,7 +21,11 @@ function download_data(){
             var fileNameCSV = res.report_title + ".csv";
             var fileNameEXCEL = res.report_title + ".xls";
             var jsonObject = res.report_content; 
+            var cols = res.report_cols;
 
+            var new_object = {};
+            var new_list = [];
+            
             if(jsonObject.length > 0){
                 for (var i = 0; i < jsonObject.length; i++) {
                     for (const key in jsonObject[i]) {
@@ -38,14 +42,22 @@ function download_data(){
                         }
                     }   
                 }
-                
+
+                var map_object = jsonObject.map(function(ob){
+                    for (var i = 0; i < cols.length; i++) {                        
+                        new_object[cols[i].replace(" ","_")] = ob[cols[i].replace(" ","_")];
+                    }
+                    new_list.push(new_object);
+                    new_object = {}
+                    return new_list;
+                });
                 // // Convert JSON Into File Format
 
                 // CSV File
-                // download(fileNameCSV , ConvertToCSV(jsonObject));   
+                // download(fileNameCSV , ConvertToCSV(new_list));   
 
                 // Excel File
-                download(fileNameEXCEL , ConvertToExcel(jsonObject));
+                download(fileNameEXCEL , ConvertToExcel(new_list));
             }
             else{
                 alert("No Data Available");
