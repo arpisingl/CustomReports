@@ -11,8 +11,8 @@ from datetime import date
 
 app = Flask(__name__)
 
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
-app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/Flask"
+# app.config["MONGO_URI"] = "mongodb+srv://arpitMongo:!YNsbW7!ibqBcZ4@cluster0.vznht.mongodb.net/Flask?retryWrites=true&w=majority"
 app.secret_key = "mysecret_key4@1234"
 mongo = PyMongo(app)
 
@@ -711,7 +711,7 @@ def save_report_form(id,report_id):
 				report_last_edit = now.strftime("%d/%m/%Y %H:%M:%S")
 				reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
 
-				return redirect(url_for('load_report_form',id=id,report_id=report_id))
+				return redirect(url_for('load_user_report',id=id,report_id=report_id))
 			else:
 				RD_response = {
 					"status" : "False",
@@ -808,7 +808,7 @@ def save_report_data(id,report_id):
 		return render_template("index.html", response = response)
 
 if __name__ == "__main__":
-	app.run()
-# 	app.run(debug=True, host="0.0.0.0", port=3000)
+	# app.run()
+	app.run(debug=True, host="0.0.0.0", port=3000)
 
 
