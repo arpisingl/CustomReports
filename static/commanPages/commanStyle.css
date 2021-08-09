@@ -138,3 +138,11 @@
 .a_link{
     text-decoration: none;
 }   
+
+.report-link{
+    color: #f3f3f3;
+    background-color: #4e6ff3;
+    margin-left: 20px;
+    padding: 3px 10px;
+    border-radius: 0.7em;
+}

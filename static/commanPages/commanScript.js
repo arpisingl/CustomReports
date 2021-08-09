@@ -4,6 +4,7 @@ $(document).ready(function(){
 	// 
 	url = window.location.href;
 	urls = url.split("/")
+
 	userid = urls[urls.length-2];
 	report_id = urls[urls.length-1];
 
@@ -133,5 +134,20 @@ function getReportSize(){
 function shareReport(){
 	// /report-form/<id>
 	$("#share_link").css("display","flex");
+	var link = window.location.href.split("user")[0];
+	link += "report-form/"+userid+"/"+report_id;
+	$(".report-link").html(link);
 }
 
+function callcopyFunc() {
+  CopyToClipboard("copy_url");
+}
+function CopyToClipboard(id) {
+
+	var r = document.createRange();
+	r.selectNode(document.getElementById(id));
+	window.getSelection().removeAllRanges();
+	window.getSelection().addRange(r);
+	document.execCommand('copy');
+	window.getSelection().removeAllRanges();
+}

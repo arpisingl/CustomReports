@@ -658,7 +658,7 @@ def save_report(id):
 		return render_template("index.html", response = response)		
 
 # Save Report Form
-@app.route("/user/save-report-data/<id>/<report_id>", methods=['POST'])
+@app.route("/user/save-report-form/<id>/<report_id>", methods=['POST'])
 def save_report_form(id,report_id):
 	now = dt.now()
 	RD_response = {
@@ -714,7 +714,7 @@ def save_report_form(id,report_id):
 				report_last_edit = now.strftime("%d/%m/%Y %H:%M:%S")
 				reportData = report_model.update_report_last_edit(mongo,id,report_id,report_last_edit)
 
-				return redirect(url_for('load_user_report',id=id,report_id=report_id))
+				return redirect(url_for('load_report_form',id=id,report_id=report_id))
 			else:
 				RD_response = {
 					"status" : "False",
