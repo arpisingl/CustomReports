@@ -33,6 +33,10 @@ class User():
 		U = mongo.db.User.update_one({"username" : id},{ '$set' : {'no_of_report_created': cnt} })
 		return U
 
+	def getProfileDataByUserid(mongo,userid):
+		user = mongo.db.User.find_one({"username" : userid})
+		return user
+
 class Reports():
 	def save_report_to_DB(mongo,report_data):
 		R = mongo.db.Report.insert_one(report_data)

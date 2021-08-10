@@ -65,8 +65,10 @@
 
 					</div>
 					<div class="col-sm-1 menu-options">
-						Profile
-						<span class="lnr lnr-user"></span>
+						<a class="a_links" href="{{url_for('load_user_profile', id=data.username)}}">
+							Profile
+							<span class="lnr lnr-user"></span>
+						</a>
 					</div>
 					<div class="col-sm-1 menu-options">
 						<a class="a_links" href="/logout/{{data.username}}">
@@ -147,7 +149,7 @@
 										</div>
 										<div class="report-type">
 											Report Created by : 
-											<a href="#">
+											<a href="{{url_for('load_user_profile', id=data.username)}}">
 												{{report_content['report_created_by']}}
 											</a>
 										</div>
@@ -190,12 +192,6 @@
 										<span class="lnr lnr-location"></span>
 									</button>
 								</div>
-							</div>	
-							<div class="share_link_area" id="share_link">
-								<button class="copy-btn" onClick="callcopyFunc();" >
-									Copy Link
-								</button>
-								<div class="report-link" id="copy_url"></div>
 							</div>	
 						</div>
 						<div class="col-sm-5">
@@ -326,6 +322,14 @@
 								</div>
 							</form>
 						</div>
+					</div>
+					<div class="row">
+						<div class="share_link_area" id="share_link">
+							<button class="copy-btn" onClick="callcopyFunc();" >
+								Copy Link
+							</button>
+							<div class="report-link" id="copy_url"></div>
+						</div>	
 					</div>
 				{% endif %}
 

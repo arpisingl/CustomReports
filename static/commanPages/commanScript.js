@@ -132,7 +132,6 @@ function getReportSize(){
 }
 
 function shareReport(){
-	// /report-form/<id>
 	$("#share_link").css("display","flex");
 	var link = window.location.href.split("user")[0];
 	link += "report-form/"+userid+"/"+report_id;

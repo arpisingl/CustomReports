@@ -51,8 +51,10 @@
 						<span class="lnr lnr-user"></span> -->
 					</div>
 					<div class="col-sm-1 menu-options">
-						Profile
-						<span class="lnr lnr-user"></span>
+						<a class="a_links" href="{{url_for('load_user_profile', id=data.username)}}">
+							Profile
+							<span class="lnr lnr-user"></span>
+						</a>
 					</div>
 					<!-- <div class="col-sm-1 menu-options">
 						Settings

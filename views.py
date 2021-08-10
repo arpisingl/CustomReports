@@ -8,8 +8,6 @@ from models import Reports as report_model
 from models import ReportData as rd_model
 from datetime import datetime as dt
 from datetime import date
-# import pandas as pd
-# from pandas import DataFrame as df
 
 app = Flask(__name__)
 
@@ -81,6 +79,37 @@ def logout(id):
 			'message' : "Incorrect UserId"
 		}
 		return render_template("index.html", response = response)	
+
+
+# User Profile Page
+@app.route("/user/profile/<id>")
+def load_user_profile(id):
+	userData = user.getProfileDataByUserid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			count = 0
+			orig_password = userData['password']
+			for i in userData['password']:
+				count = count +1
+
+			for k in range(0,count-3):
+				orig_password = orig_password.replace(orig_password[k],"*")
+			
+			userData['password'] = orig_password
+			return render_template("Profile.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
+
 
 # Create New Report Page
 @app.route("/user/create-report/<id>")
