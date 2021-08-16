@@ -12,6 +12,10 @@ $(document).ready(function(){
 		window.location.href = "/report-form/"+userid+"/"+report_id;
 	});
 
+	$('#modify_link').click(function(){
+		window.location.href = "/user/modify-report-content/"+userid+"/"+report_id;
+	});
+
 
 	getReportSize();
 });
@@ -149,4 +153,11 @@ function CopyToClipboard(id) {
 	window.getSelection().addRange(r);
 	document.execCommand('copy');
 	window.getSelection().removeAllRanges();
+}
+
+
+// Modfy Reports..
+function loadModifyReport(){
+
+
 }

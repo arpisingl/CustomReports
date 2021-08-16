@@ -2,7 +2,7 @@
 <html>
 <head>
 
-	<title>User Dashboard</title>
+	<title>Modify Reports</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,8 +14,12 @@
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 
+	<!-- CSS Files -->
 	<link rel="stylesheet" href="{{ url_for('static',filename='logPages/css/style.css') }}">
 
+	<link rel="stylesheet" href="{{ url_for('static',filename='commanPages/commanStyle.css') }}">
+
+	<!-- Linear icons -->
 	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
 
 	<!-- Jquery -->
@@ -23,8 +27,8 @@
 	  src="https://code.jquery.com/jquery-3.6.0.min.js"
 	  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 	  crossorigin="anonymous"></script>
-	  
-	<!-- JS File -->
+
+	<!-- Js file -->
 	<script type="text/javascript" src="{{ url_for('static',filename='homePages/homeScript.js') }}"></script>
 
 </head>
@@ -68,7 +72,8 @@
 						
 					</div>
 					<div class="welcome_text col-sm-8">
-						Welcome {{ data.username }}
+						Welcome 
+						<span id="username">{{ data.username }}</span>
 					</div>
 					<div class="col-sm-2">
 						
@@ -76,7 +81,7 @@
 				</div>
 				<div class="text_heading row">
 					<div class="col-sm-8">
-						Create your own custom reports
+						Total Available Reports : {{ data.no_of_report_created }}
 					</div>
 					<div class="col-sm-4">
 						<div class="row">
@@ -98,61 +103,66 @@
 		<div class="body-section">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-6">
-						<div class="body_cover row">
-							<div class="blocks col-sm-6">
-								<a class="a_links" href="{{url_for('load_create_report', id=data.username)}}">
-									Create new
-									<span class="lnr lnr-file-add"></span>
-								</a>
+					<div class="col-sm-7">
+						{% for report in user_reports %}
+						<div class="report_block col-sm-12">
+							<div class="row">
+								<div class="col-sm-7">
+									<div class="report-title">
+										{{report['report_title']}}
+										<!-- <span class="report-size">
+											5
+										</span> -->
+									</div>
+								</div>
+								
+								<div class="col-sm-5">
+									
+									<a href="{{url_for('load_modify_report_data',id = report['report_created_by'], report_id = report['report_id'])}}">
+										<div class="btn btn-info">
+											Modify Report
+											<!-- <span class="lnr lnr-location"></span> -->
+										</div>
+									</a>
+									<a href="{{url_for('load_user_report',id = report['report_created_by'], report_id = report['report_id'])}}">
+										<div class="btn btn-success">
+											View 
+											<!-- <span class="lnr lnr-location"></span> -->
+										</div>
+									</a>
+								</div>
 							</div>
-							<div class="blocks col-sm-6">
-								<a class="a_links" href="{{url_for('load_view_reports', id=data.username)}}">
-									View All
-									<span class="lnr lnr-menu"></span>
-								</a>
+							<div class="row">
+								<div class="col-sm-7">
+									<div class="report-type">
+										Report Type : {{report['report_type']}}
+										
+									</div>
+									<div class="report-sub-title">Last edit : {{report['reprot_last_edit']}}</div>
+								</div>
 							</div>
-							
-						</div>
-						<div class="body_cover row">
-							<div class="blocks col-sm-6">
-								Shared
-								<span class="lnr lnr-upload"></span>
+							<br>
+							<div class="row">
+								{% for field in report['report_fields_name'] %}
+								<div class="report-fields">
+									{{field}}
+								</div>
+								{% endfor %}
 							</div>
-							<!-- Modify Reports -->
-							<div class="blocks col-sm-6"> 
-								<a class="a_links" href="{{url_for('load_modify_reports', id=data.username)}}">
-									Modify
-									<span class="lnr lnr-pencil"></span>
-								</a>
-							</div>
-							
-						</div>
-						<div class="body_cover row">
-							<div class="blocks col-sm-6">
-								Downloaded
-								<span class="lnr lnr-download"></span>
-							</div>
-							<div class="blocks col-sm-6">
-								Settings
-								<span class="lnr lnr-cog"></span>
-							</div>
-						</div>						
+						</div>		
+						{% endfor %}			
 					</div>
-					<div class="col-sm-1">
-					</div>
-
+					
 					<div class="col-sm-5 right_pannel">
 						<div class="heading-section_1">
-							Your Recent Reports
+							Last Modified :
 						</div>
 						<div class="list_reports">	
+
 							{% if report_data %}
 								{% for key in report_data %}
 								<a href="{{url_for('load_user_report',id=data.username, report_id= key['report_id'] )}}">
-									<div class="list_style">
-										{{key['report_title']}} | {{key['report_type']}} | 
-										<span class="lnr lnr-book"></span>
+									<div class="list_style">{{key['report_title']}} | {{key['report_type']}} | <span class="lnr lnr-book"></span>
 										<div>
 											Last Edited : {{key['reprot_last_edit'] }}
 										</div>
@@ -171,3 +181,4 @@
 	</DIV>
 </body>
 </html>
+

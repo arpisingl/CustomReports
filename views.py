@@ -165,6 +165,39 @@ def load_view_reports(id):
 		return render_template("index.html", response = response)		
 
 
+# Modify Reports
+@app.route("/user/modify-reports/<id>")
+def load_modify_reports(id):
+	userData = user.find_by_userid(mongo,id)
+	recent_reportData = report_model.find_recent_reports(mongo,id)
+	reportData = report_model.fetch_all_reports(mongo,id)
+
+	recent_reports = []
+	all_reports = []
+
+	for recent_report in recent_reportData:
+		recent_reports.append(recent_report)
+
+	for report_ in reportData:
+		all_reports.append(report_)
+
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			return render_template("ModifyReports.html", data = userData, report_data = recent_reports, user_reports = all_reports)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)		
+
+
 # view user report:
 @app.route("/user/report/<id>/<report_id>")
 def load_user_report(id,report_id):
@@ -227,6 +260,48 @@ def load_report_form(id,report_id):
 			'message' : "Invalid Userid"
 		}
 		return render_template("index.html", response = response)
+
+
+# User Modify Report Content
+@app.route("/user/modify-report-content/<id>/<report_id>")
+def load_modify_report_data(id,report_id):
+	userData = user.find_by_userid(mongo,id)
+	if(userData):
+		if ('userid' in session) and (userData['username'] == session['userid']):
+			
+			reportData = report_model.find_by_report_id(mongo,id,report_id)
+			if(reportData):
+			
+				report_cols = []
+				colTypes = reportData['report_fields_type']
+
+				for (a, b) in zip(reportData['report_fields_name'], colTypes):
+					report_col = {
+						'report_fields_name' : a.replace(" ","_").replace(".",""),
+						'report_fields_type' : b
+					}
+					report_cols.append(report_col)
+
+
+				# return dumps(report_content_data)
+				return render_template("ModifyUserReport.html", data = userData, report_content = reportData, report_cols = report_cols)
+			
+			else:
+				return render_template("ModifyReports.html", data = userData)
+		else:
+			response = {
+				'status' : "False",
+				'message' : "Session Expired"
+			}
+			return render_template("index.html", response = response)		
+	else:
+		response = {
+			'status' : "False",
+			'message' : "Invalid Userid"
+		}
+		return render_template("index.html", response = response)
+
+
 	
 # User Report Data Content
 @app.route("/user/report-data/<id>/<report_id>")
